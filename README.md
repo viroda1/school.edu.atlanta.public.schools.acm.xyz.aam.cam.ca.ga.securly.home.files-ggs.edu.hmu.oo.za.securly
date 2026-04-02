@@ -15,4 +15,4 @@ There's probably a legal reason for this. Securly allows you to suicide preventi
 
 Proxy breaks a lot of stuff.
 
-## https://henrybass.github.io/unblocker/
+**broght to the light**
