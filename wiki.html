@@ -1,38 +1,497 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>Site Unblocker</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Viro da 1 · Unblocked Wiki</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      color: #eef2ff;
+      padding: 2rem 1.5rem;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(2px);
+      border-radius: 3rem;
+      padding: 2rem 2rem 2.5rem;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(71, 85, 105, 0.4);
+    }
+
+    .header-flex {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #F0F9FF, #7AA2F7);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.02em;
+      display: inline-block;
+    }
+
+    .badge {
+      background: #1e2a3e80;
+      backdrop-filter: blur(4px);
+      padding: 0.2rem 0.8rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #a9c9ff;
+      border: 0.5px solid #2d3a5e;
+      display: inline-block;
+    }
+
+    .sub {
+      color: #9ca8c3;
+      margin-top: 0.3rem;
+      margin-bottom: 2rem;
+      border-left: 3px solid #3b82f6;
+      padding-left: 1rem;
+      font-weight: 450;
+    }
+
+    /* custom link grid */
+    .wiki-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.8rem;
+      margin: 1.8rem 0 1rem;
+    }
+
+    .wiki-card {
+      background: #0f172ad9;
+      border-radius: 1.8rem;
+      padding: 1.4rem 1.6rem;
+      border: 1px solid #1e293b;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(2px);
+    }
+
+    .wiki-card:hover {
+      border-color: #3b82f6;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.4);
+      background: #111827e6;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      border-left: 4px solid #3b82f6;
+      padding-left: 0.8rem;
+    }
+
+    .link-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .link-list li {
+      margin: 0;
+    }
+
+    .unblock-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #02061770;
+      padding: 0.6rem 1rem;
+      border-radius: 2rem;
+      text-decoration: none;
+      color: #cbd5ff;
+      font-weight: 500;
+      transition: all 0.2s;
+      border: 1px solid #2d3a5e;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .unblock-link:hover {
+      background: #1e2a47;
+      color: white;
+      border-color: #3b82f6;
+      transform: scale(0.98);
+      box-shadow: 0 0 8px rgba(59,130,246,0.3);
+    }
+
+    .link-domain {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      background: #0a0f1f;
+      padding: 0.2rem 0.7rem;
+      border-radius: 2rem;
+      color: #9ab3ff;
+    }
+
+    .arrow {
+      font-size: 1.1rem;
+      opacity: 0.7;
+    }
+
+    .custom-input-area {
+      background: #0f172ad9;
+      border-radius: 2rem;
+      padding: 1.4rem 1.8rem;
+      margin: 1.5rem 0 1rem;
+      border: 1px solid #253450;
+    }
+
+    .flex-custom {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    #customUrl {
+      flex: 3;
+      background: #020617cc;
+      border: 1px solid #334155;
+      border-radius: 3rem;
+      padding: 0.8rem 1.5rem;
+      font-size: 0.95rem;
+      color: #f1f5f9;
+      font-family: monospace;
+      outline: none;
+    }
+
+    #customUrl:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59,130,246,0.3);
+    }
+
+    .gen-btn {
+      background: linear-gradient(95deg, #2563eb, #1e40af);
+      border: none;
+      padding: 0.7rem 1.8rem;
+      border-radius: 3rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .gen-btn:hover {
+      background: linear-gradient(95deg, #3b82f6, #2563eb);
+      transform: scale(0.96);
+    }
+
+    .result-row {
+      margin-top: 1.2rem;
+      background: #02061760;
+      border-radius: 2rem;
+      padding: 0.6rem 1.2rem 0.6rem 1.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .generated-link {
+      font-family: monospace;
+      background: #0f212e;
+      padding: 0.5rem 1.2rem;
+      border-radius: 2.5rem;
+      text-decoration: none;
+      color: #b9e0ff;
+      word-break: break-all;
+      flex: 2;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .generated-link:hover {
+      background: #1e2f47;
+      text-decoration: underline;
+    }
+
+    .copy-sm {
+      background: #1e293b;
+      padding: 0.4rem 1.2rem;
+      border-radius: 2rem;
+      border: none;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    footer {
+      margin-top: 2.5rem;
+      border-top: 1px solid #1e2a44;
+      padding-top: 1.5rem;
+      font-size: 0.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      color: #8192b0;
+    }
+
+    .crypto {
+      background: #0f172f;
+      padding: 0.3rem 1rem;
+      border-radius: 2rem;
+      font-family: monospace;
+    }
+
+    .badge-tip {
+      background: #111a2b;
+      padding: 0.2rem 1rem;
+      border-radius: 2rem;
+      font-size: 0.7rem;
+      display: inline-block;
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 1rem;
+      }
+      .container {
+        padding: 1.2rem;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      .generated-link {
+        white-space: normal;
+        word-break: break-word;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header-flex">
+    <h1>UNBLOCKED WIKI</h1>
+    <span class="badge">⚡ dual‑layer · translate proxy + exploit</span>
+  </div>
+  <div class="sub">curated unblocked links · community driven · instant bypass</div>
+
+  <!-- custom unblocker tool -->
+  <div class="custom-input-area">
+    <div class="flex-custom">
+      <input type="text" id="customUrl" placeholder="https://any-blocked-site.com" value="https://en.wikipedia.org/wiki/Main_Page">
+      <button class="gen-btn" id="generateCustomBtn">⟳ Unblock</button>
+    </div>
+    <div class="result-row">
+      <span style="font-size:0.85rem; font-weight:500;">🔓 UNBLOCKED →</span>
+      <a href="#" id="dynamicLink" class="generated-link" target="_blank" rel="noopener noreferrer">[ generate unblocked link ]</a>
+      <button id="copyDynamicBtn" class="copy-sm">📋 Copy</button>
+    </div>
+    <div style="margin-top: 0.7rem;">
+      <span class="badge-tip">⚡ auto proxy + sec·bypass · toggle exploit?</span>
+      <label style="margin-left: 1rem; display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+        <input type="checkbox" id="toggleExploitWiki" checked> <span style="font-size:0.75rem;">🛡️ Disable exploit</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- curated wiki links grid -->
+  <div class="wiki-grid">
+    <!-- Social Media -->
+    <div class="wiki-card">
+      <div class="card-title">
+        <span>📱</span> Social Media
+      </div>
+      <ul class="link-list">
+        <li><a href="#" class="unblock-link" data-raw="https://www.reddit.com">Reddit <span class="link-domain">reddit.com</span><span class="arrow">↗</span></a></li>
+        <li><a href="#" class="unblock-link" data-raw="https://www.youtube.com">YouTube <span class="link-domain">youtube.com</span><span class="arrow">↗</span></a></li>
+        <li><a href="#" class="unblock-link" data-raw="https://imgur.com">Imgur <span class="link-domain">imgur.com</span><span class="arrow">↗</span></a></li>
+      </ul>
+    </div>
+
+    <!-- Gaming -->
+    <div class="wiki-card">
+      <div class="card-title">
+        <span>🎮</span> Gaming
+      </div>
+      <ul class="link-list">
+        <li><a href="#" class="unblock-link" data-raw="https://www.ign.com">IGN <span class="link-domain">ign.com</span><span class="arrow">↗</span></a></li>
+        <li><a href="#" class="unblock-link" data-raw="https://store.steampowered.com">Steam Store <span class="link-domain">store.steampowered.com</span><span class="arrow">↗</span></a></li>
+      </ul>
+    </div>
+
+    <!-- Other / Streaming -->
+    <div class="wiki-card">
+      <div class="card-title">
+        <span>🎬</span> Entertainment & Tools
+      </div>
+      <ul class="link-list">
+        <li><a href="#" class="unblock-link" data-raw="https://henrybass.github.io">HenryBass <span class="link-domain">henrybass.github.io</span><span class="arrow">↗</span></a></li>
+        <li><a href="#" class="unblock-link" data-raw="https://www.netflix.com">Netflix <span class="link-domain">netflix.com</span><span class="arrow">↗</span></a></li>
+        <li><a href="#" class="unblock-link" data-raw="https://www.coinbase.com/price/bitcoin">BTC Prices <span class="link-domain">coinbase.com</span><span class="arrow">↗</span></a></li>
+      </ul>
+    </div>
+  </div>
   
-  <body>
-    <h1>Unblocked Wiki</h1>
+  <div style="display: flex; justify-content: flex-end; margin: 0.5rem 0 0.5rem;">
+    <span style="background:#0f172a60; padding:0.2rem 1rem; border-radius:2rem; font-size:0.7rem;">⚡ commit working links · open source spirit</span>
+  </div>
 
-    <p>Commit to the repository to submit working links you find!</p>
+  <footer>
+    <div>Viro da 1 · unblocked wiki engine</div>
+    <div class="crypto">🐕 donate (doge): DJk2DqRE2B5FT9N9U85n5Ud9WETPRJa1yj</div>
+  </footer>
+</div>
+
+<script>
+  // Core unblocking function (Google Translate proxy + Securly exploit)
+  function buildUnblockedUrl(rawUrl, disableExploit = false) {
+    if (!rawUrl) return "#";
+    let finalUrl = rawUrl.trim();
+    // ensure protocol
+    if (!finalUrl.startsWith("http://") && !finalUrl.startsWith("https://")) {
+      finalUrl = "https://" + finalUrl;
+    }
+    // Proxy via Google Translate
+    let encodedTarget = encodeURIComponent(finalUrl);
+    let proxied = `https://translate.google.com/translate?sl=en&tl=en&u=${encodedTarget}`;
     
-    <a href="index.html">Home</a>
+    // Exploit layer (unless disabled)
+    if (!disableExploit) {
+      if (proxied.includes('?')) {
+        proxied = proxied + "&suicidepreventionlifeline.org";
+      } else {
+        proxied = proxied + "?suicidepreventionlifeline.org";
+      }
+    }
+    return proxied;
+  }
 
-    <h2>Social Media:</h2>
+  // Get current exploit toggle state
+  function isExploitDisabled() {
+    const toggle = document.getElementById("toggleExploitWiki");
+    return toggle ? toggle.checked : false;
+  }
+
+  // Update dynamic custom link area
+  function updateDynamicLink() {
+    const rawInput = document.getElementById("customUrl").value;
+    const disable = isExploitDisabled();
+    const unblocked = buildUnblockedUrl(rawInput, disable);
+    const anchor = document.getElementById("dynamicLink");
+    if (unblocked && unblocked !== "#") {
+      anchor.href = unblocked;
+      let display = unblocked;
+      if (display.length > 75) display = display.substring(0, 70) + "…";
+      anchor.innerText = display;
+    } else {
+      anchor.href = "#";
+      anchor.innerText = "[⚠️ invalid url]";
+    }
+  }
+
+  // Copy dynamic link
+  function copyDynamicLink() {
+    const anchor = document.getElementById("dynamicLink");
+    let urlToCopy = anchor.href;
+    if (!urlToCopy || urlToCopy === "#" || urlToCopy === window.location.href + "#") {
+      const raw = document.getElementById("customUrl").value;
+      const disable = isExploitDisabled();
+      urlToCopy = buildUnblockedUrl(raw, disable);
+      if (urlToCopy === "#") {
+        alert("❌ No valid URL");
+        return;
+      }
+    }
+    navigator.clipboard.writeText(urlToCopy).then(() => {
+      const btn = document.getElementById("copyDynamicBtn");
+      const original = btn.innerText;
+      btn.innerText = "✓ Copied!";
+      setTimeout(() => { btn.innerText = original; }, 1000);
+    }).catch(() => alert("Manual copy required"));
+  }
+
+  // Pre-configure all wiki links with dynamic unblocking (based on exploit toggle)
+  function refreshAllWikiLinks() {
+    const disableExploit = isExploitDisabled();
+    const allLinks = document.querySelectorAll(".unblock-link");
+    allLinks.forEach(link => {
+      const rawUrl = link.getAttribute("data-raw");
+      if (rawUrl) {
+        const unblocked = buildUnblockedUrl(rawUrl, disableExploit);
+        link.href = unblocked;
+        // Optional: add tooltip to show domain clarity, but keep clean
+        link.setAttribute("target", "_blank");
+        link.setAttribute("rel", "noopener noreferrer");
+      }
+    });
+  }
+
+  // Event binding for toggle
+  const exploitToggle = document.getElementById("toggleExploitWiki");
+  if (exploitToggle) {
+    exploitToggle.addEventListener("change", () => {
+      refreshAllWikiLinks();
+      updateDynamicLink();   // also refresh custom tool link
+    });
+  }
+
+  // Generate custom button event
+  document.getElementById("generateCustomBtn").addEventListener("click", () => {
+    updateDynamicLink();
+  });
+  
+  document.getElementById("copyDynamicBtn").addEventListener("click", copyDynamicLink);
+  
+  // input enter key
+  const customInput = document.getElementById("customUrl");
+  customInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      updateDynamicLink();
+    }
+  });
+  
+  // On page load: initialise wiki links + dynamic preview
+  window.addEventListener("DOMContentLoaded", () => {
+    refreshAllWikiLinks();
+    updateDynamicLink();
     
-    <li><a href="https://www-reddit-com.translate.goog/?suicidepreventionlifeline.org&_x_tr_sl=en&_x_tr_tl=en&_x_tr_hl=en-US">Reddit</a>
-    <li><a href="https://www-youtube-com.translate.goog/?suicidepreventionlifeline.org&_x_tr_sl=en&_x_tr_tl=en&_x_tr_hl=en-US">Youtube</a>
-    <li><a href=" http://translate.google.com/translate?sl=en&tl=en&u=imgur.com?suicidepreventionlifeline.org">Imgur</a>
-
-    <h2>Gaming:</h2>
+    // Also set default example value to Wikipedia
+    if (customInput.value === "") customInput.value = "https://en.wikipedia.org/wiki/Main_Page";
+    updateDynamicLink();
     
-    <li><a href="https://www-ign-com.translate.goog/?suicidepreventionlifeline.org&_x_tr_sl=en&_x_tr_tl=en&_x_tr_hl=en-US">IGN</a>
-    <li><a href="http://translate.google.com/translate?sl=en&tl=en&u=https://store.steampowered.com/?suicidepreventionlifeline.org">Steam Store</a>
-
-    <h2>Other:</h2>
-
-    <li> <a href="http://translate.google.com/translate?sl=en&tl=en&u=https://henrybass.github.io/?suicidepreventionlifeline.org">henrybass</a>
-    <li> <a href="http://translate.google.com/translate?sl=en&tl=en&u=https://www.netflix.com/?suicidepreventionlifeline.org">Netflix</a>
-    <li> <a href="https://www-coinbase-com.translate.goog/price/bitcoin?suicidepreventionlifeline.org&_x_tr_sl=en&_x_tr_tl=en&_x_tr_hl=en-US">BTC Prices</a>
-
-    <h2>Henry Bass, 2021</h2>
-    <p>Tips (Doge) DJk2DqRE2B5FT9N9U85n5Ud9WETPRJa1yj<br>Thanks!
-    </p>
-  </body>
+    // Optional: If any wiki link is clicked, they already have updated href.
+    // additional visual feedback
+    const allWikiAnchors = document.querySelectorAll(".unblock-link");
+    allWikiAnchors.forEach(anchor => {
+      anchor.addEventListener("click", (e) => {
+        // just let default behaviour happen, but we ensure href is built
+        if (!anchor.href || anchor.href === "#") {
+          e.preventDefault();
+        }
+      });
+    });
+  });
+</script>
+</body>
 </html>
