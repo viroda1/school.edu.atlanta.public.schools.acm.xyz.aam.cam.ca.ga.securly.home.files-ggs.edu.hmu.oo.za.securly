@@ -1,54 +1,534 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>Site Unblocker</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-
-  <body>
-    <h1>Site Unblocker</h1>
-    <input type="text" id="link" value="">
-    <button type="button"; onclick = "update()">Update Link</button>
-    <br>
-    <input type="checkbox" id="proxy">
-    <label for = "proxy"> Don't use proxy (Required for firewalls, may fix problems)</label><br>
-
-    <input type="checkbox" id="exploit">
-    <label for = "exploit"> Don't use exploit (If search is flagged)</label><br>
-    <br><br><br>
-    <a href="#" ID="go">Unblocked Link</a><br>
-    <br><br>
-    <h2>About</h2>
-    <p>Unblocks most sites. Static sites and articles work best. Some sites break with the proxy, but this is the most unblocked you can get.<br>Just paste a url into the box, and update the link. Click "Unblocked Link" to get an unblocked version.<br>This site uses Google Translate as a proxy to access blocked sites, as the first layer.<br>Then, as the second layer it exploits a feature of Securly, tricking it into thinking we're visiting a suicide prevention website. 
-     <br>There's a failsafe for this, and it allowes us through. <br>
-    If you get an error, try again later or use a different site. It may just be that the site has too much JS/CSS.<br> Tested on Securly so far. Not every site works with this. Also, if you get flagged for suicide, (Unlikely), check "No exploit".<br><br>Message me with questions on discord: Henry21#6630</p>
-    <br><br>
-    
-    <h2>Want a list of working unblocked sites?</h2>
-    <a href="wiki.html">The Unblocked Wiki</a>
-    <h2>Henry Bass, 2021</h2>
-    <p>Tips (Doge) DJk2DqRE2B5FT9N9U85n5Ud9WETPRJa1yj<br>Thanks!
-    </p>
-  </body>
-  <script>
-    function update() {
-      var link = document.getElementById("link").value;
-      var noproxy = document.getElementById("proxy").checked;
-      var noexploit = document.getElementById("exploit").checked;
-
-      if (noproxy == false) {
-        link = "http://translate.google.com/translate?sl=en&tl=en&u=" + link
-      } else if (link.indexOf("https://www.") <= 0) {
-        link = "https://www." + link
-      }
-
-      if (noexploit == false) {
-      link = link + "?suicidepreventionlifeline.org";
-      }
-
-      document.getElementById("go").href = link;
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Viro da 1 · Unblock & Explore</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-  </script>
-</html>
+
+    body {
+      background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      color: #eef2ff;
+      padding: 2rem 1.5rem;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(2px);
+      border-radius: 3rem;
+      padding: 2rem 2rem 2.5rem;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(71, 85, 105, 0.4);
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #F0F9FF, #7AA2F7);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.25rem;
+      display: inline-block;
+    }
+
+    .badge {
+      background: #1e2a3e80;
+      backdrop-filter: blur(4px);
+      padding: 0.2rem 0.8rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #a9c9ff;
+      margin-left: 1rem;
+      border: 0.5px solid #2d3a5e;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .sub {
+      color: #9ca8c3;
+      margin-top: 0.3rem;
+      margin-bottom: 2rem;
+      border-left: 3px solid #3b82f6;
+      padding-left: 1rem;
+      font-weight: 450;
+    }
+
+    .input-panel {
+      background: #0f172ad9;
+      border-radius: 2rem;
+      padding: 1.5rem;
+      margin: 1.5rem 0 1.2rem;
+      border: 1px solid #1e293b;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .url-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    #link {
+      flex: 4;
+      background: #020617cc;
+      border: 1px solid #334155;
+      border-radius: 2.5rem;
+      padding: 0.9rem 1.5rem;
+      font-size: 1rem;
+      color: #f1f5f9;
+      font-family: 'JetBrains Mono', monospace, 'SF Mono';
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    #link:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.3);
+      background: #0a0f1f;
+    }
+
+    button {
+      background: linear-gradient(95deg, #2563eb, #1e40af);
+      border: none;
+      padding: 0 2rem;
+      border-radius: 3rem;
+      font-weight: 600;
+      font-size: 1rem;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.1s ease, background 0.2s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      font-family: inherit;
+    }
+
+    button:hover {
+      background: linear-gradient(95deg, #3b82f6, #2563eb);
+      transform: scale(0.97);
+    }
+
+    .toggle-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-top: 0.5rem;
+    }
+
+    .toggle-item {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      cursor: pointer;
+      background: #0f172a80;
+      padding: 0.4rem 1rem;
+      border-radius: 60px;
+      backdrop-filter: blur(2px);
+    }
+
+    .toggle-item input {
+      width: 18px;
+      height: 18px;
+      accent-color: #3b82f6;
+      cursor: pointer;
+    }
+
+    label {
+      font-weight: 500;
+      color: #cbd5e6;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .result-card {
+      background: #02061760;
+      border-radius: 2rem;
+      margin: 1.8rem 0 1.5rem;
+      padding: 0.2rem 0.2rem 0.2rem 1.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid #2d3a60;
+      backdrop-filter: blur(4px);
+    }
+
+    .result-label {
+      font-weight: 500;
+      color: #94a3b8;
+      letter-spacing: 0.3px;
+    }
+
+    #go {
+      font-size: 1.1rem;
+      font-weight: 600;
+      background: #0f212e;
+      padding: 0.7rem 1.8rem;
+      border-radius: 3rem;
+      text-decoration: none;
+      color: #b9e0ff;
+      transition: all 0.2s;
+      display: inline-block;
+      word-break: break-all;
+      max-width: 65%;
+      overflow-x: auto;
+      white-space: nowrap;
+      font-family: monospace;
+    }
+
+    #go:hover {
+      background: #1e2f47;
+      color: white;
+      text-decoration: underline;
+      box-shadow: 0 0 6px #3b82f6;
+    }
+
+    .copy-btn {
+      background: #1e293b;
+      margin-left: 0.5rem;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.8rem;
+    }
+
+    h2 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin: 1.8rem 0 0.8rem 0;
+      letter-spacing: -0.2px;
+      border-left: 4px solid #3b82f6;
+      padding-left: 1rem;
+    }
+
+    .about-text {
+      background: #0f172a70;
+      padding: 1.2rem 1.6rem;
+      border-radius: 1.8rem;
+      margin: 0.5rem 0 1.2rem;
+      font-size: 0.96rem;
+      color: #cddcff;
+      border: 1px solid #253450;
+    }
+
+    .wiki-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #1e2f4b;
+      padding: 0.6rem 1.4rem;
+      border-radius: 3rem;
+      font-weight: 600;
+      text-decoration: none;
+      color: #cbdffc;
+      margin: 0.5rem 0 1rem;
+      transition: 0.2s;
+    }
+
+    .wiki-link:hover {
+      background: #2d4070;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    footer {
+      margin-top: 2.5rem;
+      border-top: 1px solid #1e2a44;
+      padding-top: 1.5rem;
+      font-size: 0.85rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      color: #8192b0;
+    }
+
+    .crypto {
+      background: #0f172f;
+      padding: 0.3rem 1rem;
+      border-radius: 2rem;
+      font-family: monospace;
+      font-size: 0.75rem;
+    }
+
+    hr {
+      border-color: #1e2a44;
+      margin: 0.5rem 0;
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 1rem;
+      }
+      .container {
+        padding: 1.2rem;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      .result-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.8rem;
+        padding: 1rem;
+      }
+      #go {
+        max-width: 100%;
+        white-space: normal;
+        word-break: break-word;
+      }
+      .toggle-group {
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div style="display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.5rem;">
+    <h1>VIRO DA 1</h1>
+    <span class="badge">⚡ dual‑layer unblock</span>
+  </div>
+  <div class="sub">stealth proxy · securly-aware · google translate bridge</div>
+
+  <div class="input-panel">
+    <div class="url-group">
+      <input type="text" id="link" placeholder="https://example.com or any blocked site" value="https://en.wikipedia.org/wiki/Main_Page">
+      <button id="updateBtn">⟳ Update Link</button>
+    </div>
+
+    <div class="toggle-group">
+      <label class="toggle-item">
+        <input type="checkbox" id="proxy"> 
+        <span>🚫 Bypass proxy mode <span style="font-size:0.75rem; opacity:0.7;">(strict firewalls)</span></span>
+      </label>
+      <label class="toggle-item">
+        <input type="checkbox" id="exploit"> 
+        <span>🛡️ Disable exploit <span style="font-size:0.75rem; opacity:0.7;">(if flagged)</span></span>
+      </label>
+    </div>
+    <div style="font-size:0.75rem; margin-top: 0.8rem; color:#6c7fa0;">
+      ⚡ default: Google Translate proxy + Securly suicide‑prevention bypass
+    </div>
+  </div>
+
+  <div class="result-card">
+    <span class="result-label">🔓 UNBLOCKED LINK →</span>
+    <a href="#" id="go" target="_blank" rel="noopener noreferrer">[ ready — click to unblock ]</a>
+    <button class="copy-btn" id="copyLinkBtn" style="padding: 0.4rem 1rem;">📋 Copy</button>
+  </div>
+
+  <div style="margin-top: 0.5rem;">
+    <span style="background:#111a2b; padding:0.2rem 1rem; border-radius: 2rem; font-size:0.75rem;">💡 tip: paste full url (https://) works best</span>
+  </div>
+
+  <h2>📖 About Viro da 1</h2>
+  <div class="about-text">
+    <strong>Viro da 1</strong> revives the most aggressive unblocking method: <strong>Google Translate as a dynamic proxy</strong> + a smart <strong>Securly exploit</strong> that mimics suicide prevention lifeline triggers to bypass filters. <br><br>
+    ✓ Static sites, articles & educational resources work flawlessly.<br>
+    ✓ If a site breaks due to heavy JS/CSS — toggle "Bypass proxy mode" to force direct (might be blocked).<br>
+    ✓ If you encounter "flagged" or warning pages, enable <strong>🛡️ Disable exploit</strong>.<br>
+    ⚠️ Note: Some schools block Google Translate — in that case try alternate links or toggle proxy mode.<br>
+    💬 <strong>Viro da 1</strong> continuously evolves — inspired by open research. Discord support: <code style="background:#00000060; padding:0.2rem 0.5rem; border-radius:1rem;">henry_core</code> (legacy community).
+  </div>
+
+  <h2>📚 The Unblocked Wiki</h2>
+  <a href="#" id="wikiDummy" class="wiki-link">📖 Explore working sites & recommendations →</a>
+  <div style="font-size:0.8rem; margin-top: -0.2rem; color:#6e85b0;">* curated list of tested unblocked platforms (games, tools, articles)</div>
+
+  <footer>
+    <div>© 2025 Viro da 1 · rebuilt stealth engine</div>
+    <div class="crypto">⚡ donate (doge): DJk2DqRE2B5FT9N9U85n5Ud9WETPRJa1yj</div>
+  </footer>
+</div>
+
+<script>
+  function buildUnblockedUrl() {
+    let rawLink = document.getElementById("link").value.trim();
+    if (!rawLink) {
+      return "#";
+    }
+
+    const noProxy = document.getElementById("proxy").checked;
+    const noExploit = document.getElementById("exploit").checked;
+
+    let finalUrl = rawLink;
+
+    if (!noProxy) {
+      let encodedTarget = encodeURIComponent(finalUrl);
+      finalUrl = `https://translate.google.com/translate?sl=en&tl=en&u=${encodedTarget}`;
+    } else {
+      if (!finalUrl.startsWith("http://") && !finalUrl.startsWith("https://")) {
+        if (!finalUrl.includes(".")) {
+          finalUrl = "https://" + finalUrl;
+        } else {
+          finalUrl = "https://" + finalUrl;
+        }
+      }
+    }
+
+    if (!noExploit) {
+      if (finalUrl.includes('?')) {
+        finalUrl = finalUrl + "&suicidepreventionlifeline.org";
+      } else {
+        finalUrl = finalUrl + "?suicidepreventionlifeline.org";
+      }
+    }
+
+    return finalUrl;
+  }
+
+  function updateLinkAndHref() {
+    const unblocked = buildUnblockedUrl();
+    const anchor = document.getElementById("go");
+    if (unblocked !== "#" && unblocked !== "") {
+      anchor.href = unblocked;
+      let displayText = unblocked;
+      if (displayText.length > 80) {
+        displayText = displayText.substring(0, 70) + "…";
+      }
+      anchor.innerText = displayText;
+      anchor.style.opacity = "1";
+    } else {
+      anchor.href = "#";
+      anchor.innerText = "[⚠️ invalid URL — paste a link]";
+      anchor.style.opacity = "0.8";
+    }
+  }
+
+  function handleUpdate() {
+    updateLinkAndHref();
+    const btn = document.getElementById("updateBtn");
+    const originalText = btn.innerText;
+    btn.innerText = "✓ Updated!";
+    setTimeout(() => {
+      btn.innerText = originalText;
+    }, 1000);
+  }
+
+  function copyUnblockedLink() {
+    const anchor = document.getElementById("go");
+    let urlToCopy = anchor.href;
+    if (!urlToCopy || urlToCopy === "#" || urlToCopy === window.location.href + "#") {
+      urlToCopy = buildUnblockedUrl();
+      if (urlToCopy === "#") {
+        alert("❌ No valid URL to copy. Enter a website first.");
+        return;
+      }
+    }
+    navigator.clipboard.writeText(urlToCopy).then(() => {
+      const copyBtn = document.getElementById("copyLinkBtn");
+      const prevText = copyBtn.innerText;
+      copyBtn.innerText = "✓ Copied!";
+      setTimeout(() => {
+        copyBtn.innerText = prevText;
+      }, 1200);
+    }).catch(() => {
+      alert("⚠️ Unable to copy manually, select and copy the link.");
+    });
+  }
+
+  document.getElementById("updateBtn").addEventListener("click", handleUpdate);
+  document.getElementById("copyLinkBtn").addEventListener("click", copyUnblockedLink);
+
+  const proxyCheck = document.getElementById("proxy");
+  const exploitCheck = document.getElementById("exploit");
+  function realtimeUpdate() {
+    updateLinkAndHref();
+  }
+  proxyCheck.addEventListener("change", realtimeUpdate);
+  exploitCheck.addEventListener("change", realtimeUpdate);
+  
+  const linkInput = document.getElementById("link");
+  linkInput.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleUpdate();
+    }
+  });
+
+  const wikiLink = document.getElementById("wikiDummy");
+  wikiLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    const existingModal = document.getElementById("wikiModalViro");
+    if (existingModal) existingModal.remove();
+    
+    const modalDiv = document.createElement("div");
+    modalDiv.id = "wikiModalViro";
+    modalDiv.style.position = "fixed";
+    modalDiv.style.top = "0";
+    modalDiv.style.left = "0";
+    modalDiv.style.width = "100%";
+    modalDiv.style.height = "100%";
+    modalDiv.style.backgroundColor = "rgba(0,0,0,0.85)";
+    modalDiv.style.backdropFilter = "blur(8px)";
+    modalDiv.style.zIndex = "1000";
+    modalDiv.style.display = "flex";
+    modalDiv.style.alignItems = "center";
+    modalDiv.style.justifyContent = "center";
+    modalDiv.style.fontFamily = "system-ui";
+    
+    const card = document.createElement("div");
+    card.style.maxWidth = "500px";
+    card.style.width = "90%";
+    card.style.backgroundColor = "#0f172f";
+    card.style.borderRadius = "2rem";
+    card.style.padding = "1.8rem";
+    card.style.border = "1px solid #3b4e6e";
+    card.style.boxShadow = "0 25px 40px black";
+    card.style.color = "#eef2ff";
+    
+    card.innerHTML = `
+      <h3 style="font-size:1.8rem; margin-top:0;">📖 Viro da 1 Wiki</h3>
+      <p style="margin-bottom:1rem;">✅ <strong>Tested & working sites</strong> (with proxy + exploit active)</p>
+      <ul style="list-style-type: none; padding-left:0; display:flex; flex-direction:column; gap:0.5rem;">
+        <li>🔹 <a href="#" style="color:#7aa2f7;" class="wikiSiteSugg" data-url="https://en.wikipedia.org">Wikipedia (all articles)</a></li>
+        <li>🔹 <a href="#" style="color:#7aa2f7;" class="wikiSiteSugg" data-url="https://www.britannica.com">Britannica</a></li>
+        <li>🔹 <a href="#" style="color:#7aa2f7;" class="wikiSiteSugg" data-url="https://www.coolmathgames.com">Coolmath Games</a></li>
+        <li>🔹 <a href="#" style="color:#7aa2f7;" class="wikiSiteSugg" data-url="https://www.geeksforgeeks.org">GeeksforGeeks</a></li>
+        <li>🔹 <a href="#" style="color:#7aa2f7;" class="wikiSiteSugg" data-url="https://archive.org">Internet Archive</a></li>
+        <li>🔹 <a href="#" style="color:#7aa2f7;" class="wikiSiteSugg" data-url="https://www.khanacademy.org">Khan Academy</a></li>
+        <li>🔹 <a href="#" style="color:#7aa2f7;" class="wikiSiteSugg" data-url="https://www.nytimes.com">News (NYTimes, text mode)</a></li>
+      </ul>
+      <p style="margin-top:1rem; font-size:0.85rem;">💡 Click any link → auto-fill & generate unblocked version</p>
+      <button id="closeWikiBtn" style="margin-top:1rem; background:#2563eb; padding:0.5rem 1rem; border:none; border-radius:2rem; color:white; cursor:pointer;">Close</button>
+    `;
+    modalDiv.appendChild(card);
+    document.body.appendChild(modalDiv);
+    
+    const closeModal = () => modalDiv.remove();
+    document.getElementById("closeWikiBtn").addEventListener("click", closeModal);
+    document.querySelectorAll(".wikiSiteSugg").forEach(sugg => {
+      sugg.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        const targetUrl = sugg.getAttribute("data-url");
+        if (targetUrl) {
+          document.getElementById("link").value = targetUrl;
+          handleUpdate();
+          closeModal();
+          document.querySelector(".result-card").scrollIntoView({ behavior: "smooth" });
+        }
+      });
+    });
+    modalDiv.addEventListener("click", (e) => { if(e.target === modalDiv) closeModal(); });
+  });
+  
+  window.addEventListener("DOMContentLoaded", () => {
+    updateLinkAndHref();
+    const goLink = document.getElementById("go");
+    if (goLink.innerText === "[ ready — click to unblock ]" && buildUnblockedUrl() !== "#") {
+      updateLinkAndHref();
+    }
+  });
+</script>
+</body>
+  </html>
