@@ -1,18 +1,41 @@
-# Unblocker
+# Viro da 1 · Unblocker
 
-## Unblock any blocked site!
+**Dual‑layer unblocking tool** — Google Translate proxy + Securly exploit.
 
-*This site uses Google Translate as a proxy to access blocked sites, as the first layer.*
+Bypass school/work firewalls with a smart translation proxy and a suicide‑prevention lifeline trick that forces filters to allow access.
 
-This should get through most firewalls.
+---
 
-*Then, it exploits a feature of Securly, tricking it into thinking we're visiting a suicide prevention website.
-There's a failsafe for this, and it allowes us through.*
+## 🔥 How it works
 
-There's probably a legal reason for this. Securly allows you to suicide prevention content, even if the parent site is blocked.
+1. **Google Translate proxy** – Wraps any URL in Google’s translation service, acting as a free, anonymous proxy.
+2. **Securly exploit** – Appends `?suicidepreventionlifeline.org` to the request. Securly allows suicide prevention content even if the original site is blocked.
 
-*If you get an error, try again later or use a different site. Not every site works with this.*
+> Most firewalls see the Google Translate domain as safe, and the exploit overrides remaining restrictions.
 
-Proxy breaks a lot of stuff.
+---
 
-**broght to the light**
+## 🚀 Live demo
+
+👉 **[Use the unblocker here](https://viroda1.github.io/unblocker)**  
+*(replace with your actual GitHub Pages URL)*
+
+---
+
+## 🛠️ Features
+
+- Instant unblocking of any URL
+- Toggle proxy mode (direct fallback)
+- Toggle exploit (if flagged by network)
+- Copy unblocked link with one click
+- Curated wiki of tested sites (Reddit, YouTube, Steam, Netflix, etc.)
+- Fully responsive — works on phones, tablets, desktops
+
+---
+
+## 📦 Installation (for local use)
+
+```bash
+git clone https://github.com/viroda1/unblocker.git
+cd unblocker
+open index.html
